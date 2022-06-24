@@ -15,7 +15,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from TodoApp import views
 
 urlpatterns = [
@@ -27,8 +27,9 @@ urlpatterns = [
     path('logout/', views.logoutuser, name='logoutuser'),
 
     # Todos
-    path('', include('TodoApp.urls'))
+    path('', include('TodoApp.urls')),
 
     #api Todos
-    path('api/', include('TodoApi.urls'))
+    path('api/', include('TodoApi.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
