@@ -14,22 +14,24 @@ class TodoCompletedList(generics.ListAPIView):
         user = self.request.user
         return Todo.objects.filter(user=user, datecompleted__isnull=False).order_by('-datecompleted')
 
-class TodoCurrentList(generics.ListCreateAPIView):
+class TodoCurrentListCreate(generics.ListCreateAPIView):
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Todo.objects.filter(user=user, datecompleted__isnull=True).order_by('-datecompleted')
+        return Todo.objects.filter(user=user, datecompleted__isnull=True)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 class TodoRetrieveDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TodoSerializer
-    queryset = Todo.objects.all()
-    serializer = TodoSerializer(queryset, many=True)
-    permission_class = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Todo.objects.filter(user=user, datecompleted__isnull=True)
 
     def delete(self, request, *args, **kwargs):
         todo = Todo.objects.filter(pk = self.kwargs['pk'], user=self.request.user, datecompleted__isnull=True)
@@ -37,3 +39,11 @@ class TodoRetrieveDestroy(generics.RetrieveUpdateDestroyAPIView):
             return self.destroy(request, *args, **kwargs)
         else:
             raise ValidationError('This isn\'t your todo so you cant delete it')
+
+class TodoCompletedDestroy(generics.RetrieveDestroyAPIView):
+    serializer_class = TodoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Todo.objects.filter(user=user, datecompleted__isnull=False)
