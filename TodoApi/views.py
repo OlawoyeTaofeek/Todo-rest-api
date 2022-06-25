@@ -7,6 +7,7 @@ from django.utils import timezone
 
 # Create your views here.
 
+# List All Possible Completed Todo's
 class TodoCompletedList(generics.ListAPIView):
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -15,6 +16,7 @@ class TodoCompletedList(generics.ListAPIView):
         user = self.request.user
         return Todo.objects.filter(user=user, datecompleted__isnull=False).order_by('-datecompleted')
 
+# List All Possible UnCompleted Todo's
 class TodoCurrentListCreate(generics.ListCreateAPIView):
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -26,6 +28,7 @@ class TodoCurrentListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+# Retrieve, Update and Delete all Possible UnCompleted Todo's
 class TodoRetrieveDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -41,6 +44,7 @@ class TodoRetrieveDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             raise ValidationError('This isn\'t your todo so you cant delete it')
 
+# Retrieve and Delete all Possible Completed Todo's
 class TodoCompletedDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -49,6 +53,7 @@ class TodoCompletedDestroy(generics.RetrieveDestroyAPIView):
         user = self.request.user
         return Todo.objects.filter(user=user, datecompleted__isnull=False)
 
+# Add Completed to a to do if not completed 
 class TodoComplete(generics.UpdateAPIView):
     serializer_class = TodoCompleteSerializer
     permission_classes = [permissions.IsAuthenticated]
