@@ -31,5 +31,5 @@ urlpatterns = [
 
     #api Todos
     path('api/', include('TodoApi.urls')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-auth/', include('rest_framework.urls')),
 ]

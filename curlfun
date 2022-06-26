@@ -1,1 +1,3 @@
-curl -X 'POST' http://127.0.0.1:8000/api/SignUp -H 'Content-Type: application/json' -d '{"username":"Oladip", "password":"Oladip@26"}'
+curl -X "POST" http://localhost:8000/api/signup -H 'Content-Type: application/json' -d '{"username":"Oladipupo", "password":"Oladipupo@26"}'
+
+curl -X "POST" http://localhost:8000/api/get-token -H 'Content-Type: application/json' -d '{"username":"Oladip", "password":"Oladip@26"}'
